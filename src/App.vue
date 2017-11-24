@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <v-ons-button @click="executeButtonClick()">実行</v-ons-button>
+    <v-ons-button @click="executeButtonClick();">実行</v-ons-button>
+    <v-ons-button @click="resetButtonClick();">リセット</v-ons-button>
+    <br />
     結果: {{ montecarloResult }}
     </br >
     誤差: {{ montecarloError }}
@@ -33,12 +35,18 @@ export default {
       seedRandom: '',
       rng: null,
       renderTexture: null,
-      renderTexture2: null,
       inCount: 0,
       totalCount: 0,
     }
   },
   methods: {
+    resetButtonClick: function() {
+      this.inCount = this.totalCount = 0;
+      this.montecarloResult = this.montecarloError = '';
+
+      let _container = new PIXI.Container();
+      this.pixiApp.renderer.render(_container, this.renderTexture, true);
+    },
     executeButtonClick: function() {
       // 乱数種
       if(this.totalCount <= 0) {
@@ -85,8 +93,6 @@ export default {
 
     let _brt = new PIXI.BaseRenderTexture(RADIUS, RADIUS);
     this.renderTexture = new PIXI.RenderTexture(_brt);
-    let _brt2 = new PIXI.BaseRenderTexture(RADIUS, RADIUS);
-    this.renderTexture2 = new PIXI.RenderTexture(_brt2);
 
     let _sprite = new PIXI.Sprite(this.renderTexture);
     this.pixiApp.stage.addChild(_sprite);
